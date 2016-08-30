@@ -2,10 +2,22 @@
 <html>
   <head>
     <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap-theme.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+  <body ng-app="myApp">
+    <navbar></navbar>
+    <div ui-view></div>
   </body>
+  <script type="text/javascript" src="/javascripts/lib/jquery.min.js" defer></script>
+  <script type="text/javascript" src="/javascripts/lib/bootstrap.min.js" defer></script>
+  <script type="text/javascript" src="/javascripts/lib/angular.min.js" defer></script>
+  <script type="text/javascript" src="/javascripts/lib/angular-animate.min.js" defer></script>
+  <script type="text/javascript" src="/javascripts/lib/angular-messages.min.js" defer></script>
+  <script type="text/javascript" src="/javascripts/lib/angular-ui-router.min.js" defer></script>
+  <script type="text/javascript" src="/javascripts/client.js" defer></script>
+  <script type="text/javascript" src="/javascripts/navbar.js" defer></script>
+  <script type="text/javascript" src="/javascripts/home.js" defer></script>
+  <script type="text/javascript" src="/javascripts/about.js" defer></script>
 </html>
