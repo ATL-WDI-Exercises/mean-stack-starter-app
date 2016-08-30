@@ -258,3 +258,152 @@ Open the url `localhost:3000` in your browser and test out the routes via the Na
 git add -A
 git commit -m "Added the NavBar and the Home and About routes."
 ```
+
+## Step 3 - Add Mongoose Models and Seeds File
+
+3a. Create the model files:
+
+```bash
+mkdir models
+touch models/user.js
+touch models/todo.js
+```
+
+3b. Add the following content to `models/user.js`:
+
+```javascript
+var mongoose = require('mongoose');
+var bcrypt   = require('bcrypt-nodejs');
+
+var UserSchema = new mongoose.Schema({
+  local : {
+    email    : String,
+    password : String
+  }
+});
+
+UserSchema.methods.encrypt = function(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
+};
+
+UserSchema.methods.isValidPassword = function(password) {
+  return bcrypt.compareSync(password, this.local.password);
+};
+
+module.exports = mongoose.model('User', UserSchema);
+```
+
+3c. Add the following content to `models/todo.js`:
+
+```javascript
+var mongoose = require('mongoose');
+
+var TodoSchema = new mongoose.Schema({
+  title:     { type: String,  required: true },
+  completed: { type: Boolean, required: true },
+  user:      { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  },
+  { timestamps: true }  // createdAt, updatedAt
+);
+
+function date2String(date) {
+  var options = {
+    weekday: 'long', year: 'numeric', month: 'short',
+    day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'
+  };
+  return date.toLocaleDateString('en-US', options);
+}
+
+TodoSchema.methods.getCreatedAt = function() {
+  return date2String(this.createdAt);
+};
+
+TodoSchema.methods.getUpdatedAt = function() {
+  return date2String(this.updatedAt);
+};
+
+module.exports = mongoose.model('Todo', TodoSchema);
+```
+
+3d. Add a `seeds.js` file with the following content:
+
+```bash
+touch seeds.js
+```
+
+```javascript
+var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
+var User = require('./models/user');
+var Todo = require('./models/todo');
+
+mongoose.connect('mongodb://localhost/todos');
+
+// our script will not exit until we have disconnected from the db.
+function quit() {
+  mongoose.disconnect();
+  console.log('\nQuitting!');
+}
+
+// a simple error handler
+function handleError(err) {
+  console.log('ERROR:', err);
+  quit();
+  return err;
+}
+
+console.log('removing old todos...');
+Todo.remove({})
+.then(function() {
+  console.log('removing old users...');
+  return User.remove({});
+})
+.then(function() {
+  console.log('creating new users');
+  let joe = new User();
+  joe.local = { email: 'joe@ga.co', password: joe.encrypt('test1234') };
+  let sue = new User();
+  sue.local = { email: 'sue@ga.co', password: sue.encrypt('test1234') };
+  return [User.create(joe), User.create(sue)];
+})
+.spread(function(joe, sue) {
+  console.log('creating some new todos...');
+  var groceries    = new Todo({ title: 'groceries',       completed: false, user: joe._id });
+  var feedTheCat   = new Todo({ title: 'feed the cat',    completed: true,  user: joe._id });
+  var learnAngular = new Todo({ title: 'Learn AngularJS', completed: true,  user: sue._id });
+  var updateResume = new Todo({ title: 'Update Resume',   completed: false, user: sue._id });
+  return Todo.create([groceries, feedTheCat, learnAngular, updateResume]);
+})
+.then(function(savedTodos) {
+  console.log('Just saved', savedTodos.length, 'todos.');
+  return Todo.find({}).populate('user');
+})
+.then(function(allTodos) {
+  console.log('Printing all todos:');
+  allTodos.forEach(function(todo) {
+    console.log(todo.toString());
+  });
+  quit();
+}, function(err) {
+  return handleError(err);
+});
+```
+
+3e. Test it out
+
+```bash
+node seeds.js
+```
+
+3f. Save your work
+
+```bash
+git add -A
+git commit -m "Added mongoose models and seeds file."
+```
+
+## Step 4 - Add Passport Security Configuration
+
+## Step 5 - Add Signup, Login, and Logout Capabilities
+
