@@ -1,8 +1,17 @@
 # Mean Stack Starter App
 
-## Steps to Reproduce
+This exercise builds a simple TODO app using the MEAN Stack. _Passport_ is used for authentication (signup, login, and logout).
 
-### Step 1 - Create the Express Project and add Dependencies
+## Table of Contents
+
+* [Step 1 - Create the Express Project and add Dependencies](#step-1---create-the-express-project-and-add-dependencies)
+* [Step 2 - Home and About Pages](#step-2---home-and-about-pages)
+* [Step 3 - Add Mongoose Models and Seeds File](#step-3---add-mongoose-models-and-seeds-file)
+* [Step 4 - Add Passport Security Configuration](#step-4---add-passport-security-configuration)
+* [Step 5 - Add Signup, Login, and Logout Capabilities](#step-5---add-signup-login-and-logout-capabilities)
+* [Step 6 - Add CRUD features for TODOs](#step-6---add-crud-features-for-todos)
+
+## Step 1 - Create the Express Project and add Dependencies
 
 1a. Create directory and run Express Generator
 
@@ -71,7 +80,7 @@ git add -A
 git commit -m "Project setup"
 ```
 
-### Step 2 - Home and About Pages
+## Step 2 - Home and About Pages
 
 In this step we will get the Home Page and About Page working with Express, Angular, and UI Router. Since AngularJS is handling all of our routing, we only need a single Expres route which was already provided to us by the Express Generator.
 
