@@ -4,6 +4,17 @@ angular.module('myApp')
   var currentUser = null;
 
   this.getCurrentUser = function() {
+    return $http.get('/me')
+    .then(res => {
+      currentUser = res.data;
+    })
+    .catch(err => {
+      console.log('ERROR:', err);
+      return $q.reject(err.data);
+    });
+  };
+
+  this.getCurrentUserSync = function() {
     return currentUser;
   };
 
@@ -39,4 +50,6 @@ angular.module('myApp')
       return $q.reject(err.data);
     });
   };
+
+  this.getCurrentUser();
 });

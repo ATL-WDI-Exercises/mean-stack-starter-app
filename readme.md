@@ -639,9 +639,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Mean Stack Starter App' });
 });
 
-// ===========================================================
-// RESTful JSON API Endpoints for SignUp, Login, and Logout
-// ===========================================================
+// =============================================================
+// RESTful JSON API Endpoints for signUp, login, logout, and me
+// =============================================================
 
 // POST /signup
 router.post('/signup', function(req, res, next) {
@@ -672,7 +672,7 @@ router.post('/login', function(req, res, next) {
     }
     req.login(user, function(err) {
       if (err) return res.status(401).json(error);
-      res.json( { email: user.local.email });
+      res.json( { email: user.local.email } );
     });
   })(req, res, next);
 });
@@ -681,6 +681,10 @@ router.post('/login', function(req, res, next) {
 router.get('/logout', function(req, res, next) {
   req.logout();
   res.sendStatus(200);
+});
+
+router.get('/me', function(req, res, next) {
+  res.json( { email: req.user ? req.user.local.email : '' } );
 });
 
 module.exports = router;
@@ -701,6 +705,17 @@ angular.module('myApp')
   var currentUser = null;
 
   this.getCurrentUser = function() {
+    return $http.get('/me')
+    .then(res => {
+      currentUser = res.data;
+    })
+    .catch(err => {
+      console.log('ERROR:', err);
+      return $q.reject(err.data);
+    });
+  };
+
+  this.getCurrentUserSync = function() {
     return currentUser;
   };
 
@@ -736,6 +751,8 @@ angular.module('myApp')
       return $q.reject(err.data);
     });
   };
+
+  this.getCurrentUser();
 });
 ```
 
@@ -1011,7 +1028,7 @@ angular.module('myApp')
           <ul class="nav navbar-nav navbar-right">
             <li ng-hide="$ctrl.Auth.isLoggedIn()" ng-class="{ active: $ctrl.$state.includes('login')  }" ><a ui-sref="login">Login</a></li>
             <li ng-hide="$ctrl.Auth.isLoggedIn()" ng-class="{ active: $ctrl.$state.includes('signup') }" ><a ui-sref="signup">Sign Up</a></li>
-            <p ng-show="$ctrl.Auth.isLoggedIn()" class="navbar-text">Signed in as {{ $ctrl.Auth.getCurrentUser().email }}</p>
+            <p ng-show="$ctrl.Auth.isLoggedIn()" class="navbar-text">Signed in as {{ $ctrl.Auth.getCurrentUserSync().email }}</p>
             <button ng-show="$ctrl.Auth.isLoggedIn()" type="button" class="btn btn-default navbar-btn" ng-click="$ctrl.logout()">Logout</button>
           </ul>
         </div>

@@ -7,9 +7,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Mean Stack Starter App' });
 });
 
-// ===========================================================
-// RESTful JSON API Endpoints for SignUp, Login, and Logout
-// ===========================================================
+// =============================================================
+// RESTful JSON API Endpoints for signUp, login, logout, and me
+// =============================================================
 
 // POST /signup
 router.post('/signup', function(req, res, next) {
@@ -40,7 +40,7 @@ router.post('/login', function(req, res, next) {
     }
     req.login(user, function(err) {
       if (err) return res.status(401).json(error);
-      res.json( { email: user.local.email });
+      res.json( { email: user.local.email } );
     });
   })(req, res, next);
 });
@@ -49,6 +49,10 @@ router.post('/login', function(req, res, next) {
 router.get('/logout', function(req, res, next) {
   req.logout();
   res.sendStatus(200);
+});
+
+router.get('/me', function(req, res, next) {
+  res.json( { email: req.user ? req.user.local.email : '' } );
 });
 
 module.exports = router;
