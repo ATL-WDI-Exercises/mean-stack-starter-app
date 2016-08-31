@@ -19,7 +19,7 @@ angular.module('myApp')
   };
 
   this.isLoggedIn = function() {
-    return currentUser !== null;
+    return currentUser ? currentUser.email !== '' : false;
   };
 
   this.login = function(credentials) {
