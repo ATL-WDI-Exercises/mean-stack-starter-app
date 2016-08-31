@@ -15,5 +15,18 @@ angular.module('myApp')
   .state('about', {
     url: "/about",
     template: "<about></about>"
+  })
+  .state('login', {
+    url: "/login",
+    template: "<login></login>"
+  })
+  .state('signup', {
+    url: "/signup",
+    template: "<signup></signup>"
+  })
+  .state('todos', {
+    url: "/todos",
+    template: "<todos></todos>"
   });
+
 });

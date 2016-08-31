@@ -17,7 +17,7 @@ angular.module('myApp')
       </article>
     </section>
   `,
-  controller: function aboutCtrl() {
+  controller: function() {
     this.clientTechnologies = [
       'Angular 1.5',
       'Twitter Bootstrap',

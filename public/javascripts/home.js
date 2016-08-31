@@ -6,7 +6,7 @@ angular.module('myApp')
     <h1>{{ $ctrl.name }}</h1>
   </section>
   `,
-  controller: function homeCtrl() {
+  controller: function() {
     this.name = 'MEAN Stack Starter App';
   }
 });
