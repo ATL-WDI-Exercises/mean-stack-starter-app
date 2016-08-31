@@ -82,7 +82,7 @@ git commit -m "Project setup"
 
 ## Step 2 - Home and About Pages
 
-In this step we will get the Home Page and About Page working with Express, Angular, and UI Router. Since AngularJS is handling all of our routing, we only need a single Expres route which was already provided to us by the Express Generator.
+In this step we will get the Home Page and About Page working with Express, Angular, and UI Router. Since AngularJS is handling all of our routing, we only need a single Express route which was already provided to us by the Express Generator.
 
 2a. Edit `routes/index.js` and change the following line:
 
