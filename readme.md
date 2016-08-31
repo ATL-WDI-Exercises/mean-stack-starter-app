@@ -1059,6 +1059,8 @@ git commit -m "Added signup, login, and logout"
 
 ## Step 6 - Add CRUD features for TODOs
 
+LAB TIME:
+
 Add the AngularJS routes and the Express RESTful endpoints for the following TODO CRUD operations
 
 * Show All Todos
@@ -1070,13 +1072,13 @@ All views and forms should be managed by AngularJS and the Express endpoints sho
 
 Also consider security for the TODO CRUD operations:
 
-1. If a user tries to view/edit/delete a Todo that does not belong to them, have the server return a 404 error, i.e.
+* If a user tries to view/edit/delete a Todo that does not belong to them, have the server return a 404 error, i.e.
 
 ```javascript
   return res.status(404).json('Not Found');
 ```
 
-2. If any TODO route is accessed without a login session, have the server return a 401 error to the client. Then have AngularJS redirect the user to the login page.
+* If any TODO route is accessed without a login session, have the server return a 401 error to the client. Then have AngularJS redirect the user to the login page.
 
 Server code:
 
