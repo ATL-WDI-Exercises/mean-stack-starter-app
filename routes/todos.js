@@ -49,7 +49,7 @@ router.get('/:id', authenticate, function(req, res, next) {
   Todo.findById(req.params.id)
   .then(function(todo) {
     if (!todo) return next(makeError(res, 'Document not found', 404));
-    if (!req.user._id.equals(todo.user)) return next(makeError(res, 'Unauthorized', 401));
+    if (!req.user._id.equals(todo.user)) return next(makeError(res, 'You do not own that Todo', 401));
     res.json(todo);
   }, function(err) {
     return next(err);
@@ -76,10 +76,10 @@ router.put('/:id', authenticate, function(req, res, next) {
 // DESTROY
 router.delete('/:id', authenticate, function(req, res, next) {
   Todo.findById(req.params.id)
-  .then(function() {
+  .then(function(todo) {
     if (!todo) return next(makeError(res, 'Document not found', 404));
     if (!req.user._id.equals(todo.user)) return next(makeError(res, 'Unauthorized', 401));
-    return Todo.removeById(todo._id);
+    return Todo.remove( { _id: todo._id } );
   })
   .then(function() {
     res.status(204).end();
