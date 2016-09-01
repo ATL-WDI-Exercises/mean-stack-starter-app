@@ -47,21 +47,19 @@ angular.module('myApp')
   </div>
   `,
   controller: function(Auth, $state) {
-    this.Auth = Auth;
-    this.$state = $state;
     this.errors = {};
 
     this.login = function(form) {
       this.submitted = true;
 
       if (form.$valid) {
-        this.Auth.login({
+        Auth.login({
           email: this.user.email,
           password: this.user.password
         })
         .then(() => {
           // Logged in, redirect to todos
-          this.$state.go('todos');
+          $state.go('todos');
         })
         .catch(err => {
           this.errors.login = err.message;

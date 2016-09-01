@@ -21,7 +21,7 @@ function authenticate(req, res, next) {
 // INDEX
 router.get('/', authenticate, function(req, res, next) {
   // get all the todos and render the index view
-  Todo.find({ user: req.user}).sort('-createdAt')
+  Todo.find({ user: req.user }).sort('-createdAt')
   .then(function(todos) {
     res.json(todos);
   }, function(err) {

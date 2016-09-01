@@ -2,7 +2,6 @@ angular.module('myApp')
 .component('todos', {
   template: `
     <h1>TODOs</h1>
-
     <div class="todos" ng-repeat = "todo in $ctrl.todos">
       <span ng-show="todo.completed" ng-click="$ctrl.toggle(todo)" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
       <span ng-hide="todo.completed" ng-click="$ctrl.toggle(todo)" class="glyphicon glyphicon-unchecked" aria-hidden="true"></span>

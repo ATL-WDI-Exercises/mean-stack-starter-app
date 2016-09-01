@@ -83,9 +83,6 @@ angular.module('myApp')
   </div>
   `,
   controller: function(Auth, $state) {
-    this.Auth = Auth;
-    this.$state = $state;
-
     this.register = function(form) {
       this.submitted = true;
 
