@@ -33,7 +33,8 @@ router.get('/', authenticate, function(req, res, next) {
 router.post('/', authenticate, function(req, res, next) {
   var todo = new Todo({
     title: req.body.title,
-    completed: req.body.completed ? true : false
+    completed: req.body.completed ? true : false,
+    user: req.user
   });
   todo.save()
   .then(function(saved) {
@@ -48,6 +49,7 @@ router.get('/:id', authenticate, function(req, res, next) {
   Todo.findById(req.params.id)
   .then(function(todo) {
     if (!todo) return next(makeError(res, 'Document not found', 404));
+    if (!req.user._id.equals(todo.user)) return next(makeError(res, 'Unauthorized', 401));
     res.json(todo);
   }, function(err) {
     return next(err);
@@ -59,11 +61,12 @@ router.put('/:id', authenticate, function(req, res, next) {
   Todo.findById(req.params.id)
   .then(function(todo) {
     if (!todo) return next(makeError(res, 'Document not found', 404));
+    if (!req.user._id.equals(todo.user)) return next(makeError(res, 'Unauthorized', 401));
     todo.title = req.body.title;
     todo.completed = req.body.completed ? true : false;
     return todo.save();
   })
-  .then(function(saved) {
+  .then(function(todo) {
     res.json(todo);
   }, function(err) {
     return next(err);
@@ -72,7 +75,12 @@ router.put('/:id', authenticate, function(req, res, next) {
 
 // DESTROY
 router.delete('/:id', authenticate, function(req, res, next) {
-  Todo.findByIdAndRemove(req.params.id)
+  Todo.findById(req.params.id)
+  .then(function() {
+    if (!todo) return next(makeError(res, 'Document not found', 404));
+    if (!req.user._id.equals(todo.user)) return next(makeError(res, 'Unauthorized', 401));
+    return Todo.removeById(todo._id);
+  })
   .then(function() {
     res.status(204).end();
   }, function(err) {
@@ -85,6 +93,7 @@ router.get('/:id/toggle', authenticate, function(req, res, next) {
   Todo.findById(req.params.id)
   .then(function(todo) {
     if (!todo) return next(makeError(res, 'Document not found', 404));
+    if (!req.user._id.equals(todo.user)) return next(makeError(res, 'Unauthorized', 401));
     todo.completed = !todo.completed;
     return todo.save();
   })

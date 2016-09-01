@@ -10,3 +10,7 @@ h1, h2 {
 .no-bullets {
   list-style: none;
 }
+
+.todos {
+  margin-top: 5px;
+}
