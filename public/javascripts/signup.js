@@ -87,18 +87,18 @@ angular.module('myApp')
       this.submitted = true;
 
       if (form.$valid) {
-        return this.Auth.createUser({
+        return Auth.createUser({
           name: this.user.name,
           email: this.user.email,
           password: this.user.password
         })
         .then(() => {
           // Account created, redirect to todos
-          this.$state.go('todos');
+          $state.go('todos');
         })
         .catch(err => {
           err = err.data;
-          this.errors = {};
+          errors = {};
           // Update validity of form fields that match the mongoose errors
           angular.forEach(err.errors, (error, field) => {
             form[field].$setValidity('mongoose', false);
