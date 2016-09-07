@@ -12,12 +12,12 @@ var strategy = new LocalStrategy({
 
       // If no user is found
       if (!user) {
-        return callback(null, false, { message: 'User not found.' });
+        return callback(null, false, { status: 404, message: 'User not found.' });
       }
 
       // Validate password
       if (!user.isValidPassword(password)) {
-        return callback(null, false, { message: 'Oops! Wrong password.' });
+        return callback(null, false, { status: 500, message: 'Oops! Wrong password.' });
       }
 
       return callback(null, user);

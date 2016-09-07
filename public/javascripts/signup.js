@@ -6,6 +6,9 @@ angular.module('myApp')
       <div class="col-sm-12">
         <h1>Sign up</h1>
       </div>
+
+      <h3 ng-show="$ctrl.error">{{ $ctrl.error.message }}</h3>
+
       <div class="col-sm-12">
         <form class="form" name="form" ng-submit="$ctrl.register(form)" novalidate>
 
@@ -25,6 +28,7 @@ angular.module('myApp')
             <label>Email</label>
 
             <input type="email" name="email" class="form-control" ng-model="$ctrl.user.email"
+                   ng-change="form.email.$setValidity('unique', true)"
                    required
                    mongoose-error/>
             <p class="help-block" ng-show="form.email.$error.email && $ctrl.submitted">
@@ -33,7 +37,7 @@ angular.module('myApp')
             <p class="help-block" ng-show="form.email.$error.required && $ctrl.submitted">
               What's your email address?
             </p>
-            <p class="help-block" ng-show="form.email.$error.mongoose">
+            <p class="help-block" ng-show="form.email.$error.unique">
               {{ $ctrl.errors.email }}
             </p>
           </div>
@@ -83,27 +87,24 @@ angular.module('myApp')
   </div>
   `,
   controller: function(Auth, $state) {
+    this.errors = {};
+
     this.register = function(form) {
       this.submitted = true;
 
       if (form.$valid) {
-        return this.Auth.createUser({
+        return Auth.createUser({
           name: this.user.name,
           email: this.user.email,
           password: this.user.password
         })
         .then(() => {
           // Account created, redirect to todos
-          this.$state.go('todos');
+          $state.go('todos');
         })
         .catch(err => {
-          err = err.data;
-          this.errors = {};
-          // Update validity of form fields that match the mongoose errors
-          angular.forEach(err.errors, (error, field) => {
-            form[field].$setValidity('mongoose', false);
-            this.errors[field] = error.message;
-          });
+          form.email.$setValidity('unique', false);
+          this.errors.email = err.message;
         });
       }
     };

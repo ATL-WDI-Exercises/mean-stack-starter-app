@@ -14,3 +14,15 @@ h1, h2 {
 .todos {
   margin-top: 5px;
 }
+
+.error {
+  max-width: 600px;
+}
+
+.error h1 {
+  margin: 40px;
+}
+
+.error dd, dt {
+  padding: 10px;
+}

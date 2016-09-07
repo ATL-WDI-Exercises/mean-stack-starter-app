@@ -12,7 +12,7 @@ var strategy = new LocalStrategy({
       if (err) return callback(err);
       if (user) {
         // A user with this email already exists
-        return callback(null, false, { message: 'This email is already taken.' });
+        return callback(null, false, { status: 500, message: 'This email is already taken.' });
       }
       else {
         // Create a new user

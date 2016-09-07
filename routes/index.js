@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var makeError = require('./make-error');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,15 +15,17 @@ router.get('/', function(req, res, next) {
 // POST /signup
 router.post('/signup', function(req, res, next) {
   passport.authenticate('local-signup', function(err, user, info) {
+    console.log('err:', err);
+    console.log('info:', info);
     var error = err || info;
     if (error) {
-      return res.status(401).json(error);
+      return res.status(500).json(error);
     }
     if (!user) {
-      return res.status(404).json({message: 'Something went wrong, please try again.'});
+      return next(makeError(res, 'Something went wrong, please try again.', 500));
     }
     req.login(user, function(err) {
-      if (err) return res.status(401).json(error);
+      if (err) return res.status(500).json(error);
       res.json( { email: user.local.email });
     });
   })(req, res, next);

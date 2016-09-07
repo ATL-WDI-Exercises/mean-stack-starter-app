@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('myApp', ['ngMessages', 'ngAnimate', 'ui.router']);
 
 angular.module('myApp')
@@ -16,6 +18,11 @@ angular.module('myApp')
     url: "/about",
     template: "<about></about>"
   })
+  .state('error', {
+    url: "/error",
+    template: "<error></error>",
+    params : { error: null }
+  })
   .state('login', {
     url: "/login",
     template: "<login></login>"
@@ -30,7 +37,12 @@ angular.module('myApp')
   })
   .state('todo-new', {
     url: "/todos/new",
-    template: "<todo-new></todo-new>"
+    template: "<todo-new></todo-new>",
+    onEnter: function(Auth, $state) {
+      if (!Auth.isLoggedIn()) {
+        $state.go('login', {});
+      }
+    }
   })
   .state('todo-show', {
     url: "/todos/:id",
